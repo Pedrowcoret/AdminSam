@@ -145,6 +145,25 @@ export const RevendaForm: React.FC = () => {
     }
   };
 
+  const handlePlanChange = (planId: string) => {
+    const plan = plans.find(p => p.codigo === Number(planId));
+    if (plan) {
+      setFormData(prev => ({
+        ...prev,
+        plano_id: plan.codigo,
+        streamings: plan.streamings,
+        espectadores: plan.espectadores,
+        bitrate: plan.bitrate,
+        espaco: plan.espaco_ftp,
+        subrevendas: plan.subrevendas
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        plano_id: undefined
+      }));
+    }
+  };
   if (loading && id) {
     return (
       <div className="space-y-6">
@@ -180,6 +199,15 @@ export const RevendaForm: React.FC = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Select
+              label="Plano de Revenda"
+              value={formData.plano_id?.toString() || ''}
+              onChange={(e) => handlePlanChange(e.target.value)}
+              options={[
+                { value: '', label: 'Sem plano (personalizado)' },
+                ...plans.map(p => ({ value: p.codigo.toString(), label: p.nome }))
+              ]}
+            />
             <Input
               label="Nome *"
               name="nome"

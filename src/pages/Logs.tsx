@@ -5,17 +5,18 @@ import { Select } from '../components/Select';
 import { Table, TableHeader, TableBody, TableCell, TableHeaderCell } from '../components/Table';
 import { Pagination } from '../components/Pagination';
 import { useNotification } from '../contexts/NotificationContext';
-import { logService } from '../services/logService';
-import { AdminLog } from '../types/admin';
+import { logService, DetailedLog } from '../services/logService';
 import { Search, Filter, Activity, FileText, User, Calendar } from 'lucide-react';
 
 export const Logs: React.FC = () => {
-  const [logs, setLogs] = useState<AdminLog[]>([]);
+  const [logs, setLogs] = useState<DetailedLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [actionFilter, setActionFilter] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [selectedLog, setSelectedLog] = useState<DetailedLog | null>(null);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
   const { addNotification } = useNotification();
 
   useEffect(() => {
@@ -170,6 +171,11 @@ export const Logs: React.FC = () => {
                         {log.acao}
                       </span>
                     </div>
+                    {log.detalhes_formatados && (
+                      <div className="text-xs text-gray-600 mt-1">
+                        {log.detalhes_formatados.acao_descricao}
+                      </div>
+                    )}
                   </TableCell>
                   <TableCell>
                     <div className="text-sm text-gray-900">{log.tabela_afetada}</div>
@@ -179,15 +185,20 @@ export const Logs: React.FC = () => {
                   </TableCell>
                   <TableCell>
                     <div className="text-sm text-gray-900">{log.ip_address}</div>
+                    <div className="text-xs text-gray-500 truncate max-w-32" title={log.user_agent}>
+                      {log.user_agent}
+                    </div>
                   </TableCell>
                   <TableCell>
-                    <div className="max-w-xs">
-                      {log.dados_novos && (
-                        <div className="text-xs text-gray-600 truncate">
-                          {JSON.stringify(log.dados_novos).substring(0, 100)}...
-                        </div>
-                      )}
-                    </div>
+                    <button
+                      onClick={() => {
+                        setSelectedLog(log);
+                        setShowDetailsModal(true);
+                      }}
+                      className="text-blue-600 hover:text-blue-800 text-sm"
+                    >
+                      Ver detalhes
+                    </button>
                   </TableCell>
                 </tr>
               ))}
@@ -203,6 +214,60 @@ export const Logs: React.FC = () => {
           />
         )}
       </Card>
+
+      {/* Details Modal */}
+      <Modal
+        isOpen={showDetailsModal}
+        onClose={() => setShowDetailsModal(false)}
+        title="Detalhes do Log"
+        size="lg"
+      >
+        {selectedLog && (
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Administrador</label>
+                <p className="text-sm text-gray-900">{selectedLog.admin_nome}</p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Data/Hora</label>
+                <p className="text-sm text-gray-900">{formatDate(selectedLog.created_at)}</p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Ação</label>
+                <p className="text-sm text-gray-900">{selectedLog.detalhes_formatados?.acao_descricao}</p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">IP Address</label>
+                <p className="text-sm text-gray-900">{selectedLog.ip_address}</p>
+              </div>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700">User Agent</label>
+              <p className="text-sm text-gray-900 break-all">{selectedLog.user_agent}</p>
+            </div>
+
+            {selectedLog.dados_anteriores && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Dados Anteriores</label>
+                <pre className="text-xs bg-gray-100 p-3 rounded overflow-auto max-h-32">
+                  {JSON.stringify(selectedLog.dados_anteriores, null, 2)}
+                </pre>
+              </div>
+            )}
+
+            {selectedLog.dados_novos && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Dados Novos</label>
+                <pre className="text-xs bg-gray-100 p-3 rounded overflow-auto max-h-32">
+                  {JSON.stringify(selectedLog.dados_novos, null, 2)}
+                </pre>
+              </div>
+            )}
+          </div>
+        )}
+      </Modal>
     </div>
   );
 };

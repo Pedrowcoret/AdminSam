@@ -239,13 +239,13 @@ export const Revendas: React.FC = () => {
                   </TableCell>
                   <TableCell>
                     <div className="text-sm space-y-1">
-                      <div>Streamings: {revenda.streamings_usadas || 0}/{revenda.streamings}</div>
-                      <div>Espectadores: {revenda.espectadores_usados || 0}/{revenda.espectadores}</div>
-                      <div>Bitrate: {revenda.bitrate_usado || 0}/{revenda.bitrate} kbps</div>
+                      <div>Streamings: 0/{revenda.streamings}</div>
+                      <div>Espectadores: 0/{revenda.espectadores}</div>
+                      <div>Bitrate: 0/{revenda.bitrate} kbps</div>
                       <div className="w-full bg-gray-200 rounded-full h-1 mt-1">
                         <div 
                           className="bg-blue-600 h-1 rounded-full" 
-                          style={{ width: `${Math.min(((revenda.streamings_usadas || 0) / revenda.streamings) * 100, 100)}%` }}
+                          style={{ width: `0%` }}
                         ></div>
                       </div>
                     </div>

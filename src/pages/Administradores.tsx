@@ -49,11 +49,29 @@ export const Administradores: React.FC = () => {
     nivel_acesso: 'admin',
     ativo: true
   });
+  const [profiles, setProfiles] = useState<any[]>([]);
 
   useEffect(() => {
     loadAdmins();
+    loadProfiles();
   }, [currentPage, searchTerm, nivelFilter, statusFilter]);
 
+  const loadProfiles = async () => {
+    try {
+      // Carregar perfis de acesso disponíveis
+      const response = await fetch('http://localhost:3001/api/profiles', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('admin_token')}`,
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setProfiles(data.profiles || []);
+      }
+    } catch (error) {
+      console.error('Erro ao carregar perfis:', error);
+    }
+  };
   const loadAdmins = async () => {
     try {
       setLoading(true);

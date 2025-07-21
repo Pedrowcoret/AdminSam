@@ -367,18 +367,18 @@ export const Streamings: React.FC = () => {
                   </TableCell>
                   <TableCell>
                     <div className="text-sm space-y-1">
-                      <div>Esp: {streaming.espectadores_conectados}/{streaming.espectadores}</div>
+                      <div>Esp: 0/{streaming.espectadores}</div>
                       <div>Bitrate: {streaming.bitrate} kbps</div>
                       <div>App: {getApplicationLabel(streaming.aplicacao)}</div>
                     </div>
                   </TableCell>
                   <TableCell>
                     <div className="text-sm">
-                      <div>{formatBytes(streaming.espaco_usado)}/{formatBytes(streaming.espaco_ftp)}</div>
+                      <div>0 MB/{formatBytes(streaming.espaco_ftp)}</div>
                       <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
                         <div 
                           className="bg-blue-600 h-2 rounded-full" 
-                          style={{ width: `${(streaming.espaco_usado / streaming.espaco_ftp) * 100}%` }}
+                          style={{ width: `0%` }}
                         ></div>
                       </div>
                     </div>

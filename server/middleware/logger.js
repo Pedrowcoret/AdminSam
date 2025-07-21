@@ -4,6 +4,32 @@ const logAdminAction = async (adminId, acao, tabelaAfetada, registroId = null, d
   try {
     const ip = req.ip || req.connection.remoteAddress || 'unknown';
     const userAgent = req.get('User-Agent') || 'unknown';
+    
+    // Melhorar o detalhamento dos dados
+    let dadosAnterioresFormatados = null;
+    let dadosNovosFormatados = null;
+    
+    if (dadosAnteriores) {
+      dadosAnterioresFormatados = typeof dadosAnteriores === 'string' 
+        ? dadosAnteriores 
+        : JSON.stringify(dadosAnteriores);
+    }
+    
+    if (dadosNovos) {
+      // Remover dados sensíveis dos logs
+      const dadosLimpos = { ...dadosNovos };
+      if (dadosLimpos.senha) {
+        dadosLimpos.senha = '[SENHA OCULTA]';
+      }
+      if (dadosLimpos.senha_root) {
+        dadosLimpos.senha_root = '[SENHA OCULTA]';
+      }
+      if (dadosLimpos.chave_api) {
+        dadosLimpos.chave_api = '[CHAVE OCULTA]';
+      }
+      
+      dadosNovosFormatados = JSON.stringify(dadosLimpos);
+    }
 
     await pool.execute(
       `INSERT INTO admin_logs (admin_id, acao, tabela_afetada, registro_id, dados_anteriores, dados_novos, ip_address, user_agent) 
@@ -13,8 +39,8 @@ const logAdminAction = async (adminId, acao, tabelaAfetada, registroId = null, d
         acao,
         tabelaAfetada,
         registroId,
-        dadosAnteriores ? JSON.stringify(dadosAnteriores) : null,
-        dadosNovos ? JSON.stringify(dadosNovos) : null,
+        dadosAnterioresFormatados,
+        dadosNovosFormatados,
         ip,
         userAgent
       ]
