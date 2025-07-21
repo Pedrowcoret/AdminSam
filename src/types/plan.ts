@@ -8,7 +8,7 @@ export interface RevendaPlan {
   bitrate: number;
   espaco_ftp: number; // em MB
   transmissao_srt: boolean;
-  preco?: number;
+  preco: number | null;
   ativo: boolean;
   data_criacao: string;
   data_atualizacao: string;
@@ -22,7 +22,7 @@ export interface StreamingPlan {
   espectadores: number;
   bitrate: number;
   espaco_ftp: number; // em MB
-  preco?: number;
+  preco: number | null;
   ativo: boolean;
   data_criacao: string;
   data_atualizacao: string;
@@ -38,7 +38,7 @@ export interface RevendaPlanFormData {
   bitrate: number;
   espaco_ftp: number;
   transmissao_srt: boolean;
-  preco?: number;
+  preco: number;
   ativo: boolean;
 }
 
@@ -48,6 +48,6 @@ export interface StreamingPlanFormData {
   espectadores: number;
   bitrate: number;
   espaco_ftp: number;
-  preco?: number;
+  preco: number;
   ativo: boolean;
 }

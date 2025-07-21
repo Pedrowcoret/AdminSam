@@ -49,9 +49,10 @@ export const RevendaForm: React.FC = () => {
   const loadPlans = async () => {
     try {
       const data = await planService.getActiveRevendaPlans();
-      setPlans(data);
+      setPlans(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('Erro ao carregar planos:', error);
+      setPlans([]);
     }
   };
   const loadRevenda = async () => {

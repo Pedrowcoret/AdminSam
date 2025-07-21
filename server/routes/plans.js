@@ -81,7 +81,7 @@ router.post('/revenda', authenticateToken, requireLevel(['super_admin', 'admin']
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         nome, descricao, subrevendas, streamings, espectadores, bitrate,
-        espaco_ftp, transmissao_srt ? 1 : 0, preco, ativo ? 1 : 0, req.admin.codigo
+        espaco_ftp, transmissao_srt ? 1 : 0, preco || 0, ativo ? 1 : 0, req.admin.codigo
       ]
     );
 
@@ -122,7 +122,7 @@ router.put('/revenda/:id', authenticateToken, requireLevel(['super_admin', 'admi
        WHERE codigo = ?`,
       [
         nome, descricao, subrevendas, streamings, espectadores, bitrate,
-        espaco_ftp, transmissao_srt ? 1 : 0, preco, ativo ? 1 : 0, planId
+        espaco_ftp, transmissao_srt ? 1 : 0, preco || 0, ativo ? 1 : 0, planId
       ]
     );
 
@@ -284,7 +284,7 @@ router.post('/streaming', authenticateToken, requireLevel(['super_admin', 'admin
       `INSERT INTO planos_streaming (
         nome, descricao, espectadores, bitrate, espaco_ftp, preco, ativo, criado_por
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-      [nome, descricao, espectadores, bitrate, espaco_ftp, preco, ativo ? 1 : 0, req.admin.codigo]
+      [nome, descricao, espectadores, bitrate, espaco_ftp, preco || 0, ativo ? 1 : 0, req.admin.codigo]
     );
 
     // Log da ação
@@ -318,7 +318,7 @@ router.put('/streaming/:id', authenticateToken, requireLevel(['super_admin', 'ad
       `UPDATE planos_streaming SET 
         nome = ?, descricao = ?, espectadores = ?, bitrate = ?, espaco_ftp = ?, preco = ?, ativo = ?
        WHERE codigo = ?`,
-      [nome, descricao, espectadores, bitrate, espaco_ftp, preco, ativo ? 1 : 0, planId]
+      [nome, descricao, espectadores, bitrate, espaco_ftp, preco || 0, ativo ? 1 : 0, planId]
     );
 
     // Log da ação

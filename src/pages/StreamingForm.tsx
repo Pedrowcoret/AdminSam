@@ -56,7 +56,7 @@ export const StreamingForm: React.FC = () => {
       ]);
 
       setRevendas(revendasData.revendas);
-      setPlans(plansData);
+      setPlans(Array.isArray(plansData) ? plansData : []);
       setServers(serversData.servers.filter(s => s.status === 'ativo'));
     } catch (error: any) {
       addNotification({
@@ -64,6 +64,7 @@ export const StreamingForm: React.FC = () => {
         title: 'Erro',
         message: 'Não foi possível carregar os dados iniciais.'
       });
+      setPlans([]);
     }
   };
 
