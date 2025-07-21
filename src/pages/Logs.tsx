@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card } from '../components/Card';
 import { Input } from '../components/Input';
 import { Select } from '../components/Select';
+import { Modal } from '../components/Modal';
 import { Table, TableHeader, TableBody, TableCell, TableHeaderCell } from '../components/Table';
 import { Pagination } from '../components/Pagination';
 import { useNotification } from '../contexts/NotificationContext';

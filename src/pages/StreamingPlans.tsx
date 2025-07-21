@@ -264,7 +264,7 @@ export const StreamingPlans: React.FC = () => {
                   </TableCell>
                   <TableCell>
                     <div className="text-sm font-medium text-gray-900">
-                      {plan.preco ? `R$ ${plan.preco.toFixed(2)}` : 'Gratuito'}
+                      {plan.preco ? `R$ ${Number(plan.preco).toFixed(2)}` : 'Gratuito'}
                     </div>
                   </TableCell>
                   <TableCell>
